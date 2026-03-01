@@ -29,7 +29,6 @@ def import_script(script_name: str):
     spec = importlib.util.spec_from_file_location(script_name, script_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    #hola
     return module
 
 
@@ -95,7 +94,7 @@ with DAG(
         python_callable=task_load_raw_data,
         doc_md="""
         ### Load Raw Data
-        Descarga el dataset de penguins usando seaborn y lo guarda
+        Descarga el dataset de penguins usando palmerpenguins y lo guarda
         en la tabla `penguins_raw` SIN ningún preprocesamiento.
         Incluye nulos y valores categóricos originales.
         """,
