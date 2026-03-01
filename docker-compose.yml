@@ -20,7 +20,7 @@ x-airflow-common:
     # Rutas internas al contenedor para los volúmenes compartidos
     SQLITE_DB_PATH: /opt/airflow/data/penguins.db
     MODELS_PATH: /opt/airflow/models
-    _PIP_ADDITIONAL_REQUIREMENTS: 'pandas scikit-learn seaborn'
+    _PIP_ADDITIONAL_REQUIREMENTS: 'pandas scikit-learn palmerpenguins'
   volumes:
     - ./volumes/dags:/opt/airflow/dags
     - ./volumes/logs:/opt/airflow/logs
