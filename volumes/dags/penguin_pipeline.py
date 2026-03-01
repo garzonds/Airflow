@@ -29,6 +29,7 @@ def import_script(script_name: str):
     spec = importlib.util.spec_from_file_location(script_name, script_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    #hola
     return module
 
 
