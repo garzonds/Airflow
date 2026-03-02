@@ -1,0 +1,28 @@
+{
+  "accuracy": 0.9851,
+  "classification_report": "              precision    recall  f1-score   support\n\n      Adelie       1.00      0.97      0.98        29\n   Chinstrap       0.93      1.00      0.97        14\n      Gentoo       1.00      1.00      1.00        24\n\n    accuracy                           0.99        67\n   macro avg       0.98      0.99      0.98        67\nweighted avg       0.99      0.99      0.99        67\n",
+  "confusion_matrix": [
+    [
+      28,
+      1,
+      0
+    ],
+    [
+      0,
+      14,
+      0
+    ],
+    [
+      0,
+      0,
+      24
+    ]
+  ],
+  "train_size": 266,
+  "test_size": 67,
+  "classes": [
+    "Adelie",
+    "Chinstrap",
+    "Gentoo"
+  ]
+}
