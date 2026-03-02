@@ -10,33 +10,6 @@ Este proyecto implementa un pipeline de Machine Learning end-to-end completament
 
 El dataset utilizado es [Palmer Penguins](https://pypi.org/project/palmerpenguins/), que contiene mediciones físicas de tres especies de pingüinos: **Adelie**, **Chinstrap** y **Gentoo**.
 
----
-
-## 🏗️ Arquitectura
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Docker Compose                          │
-│                                                             │
-│  ┌──────────────┐     ┌──────────────────────────────────┐ │
-│  │  mysql_data  │     │           AIRFLOW                │ │
-│  │  puerto 3307 │◄────│  init → webserver → scheduler   │ │
-│  │  penguins_db │     └──────────────────────────────────┘ │
-│  └──────────────┘                    │                      │
-│                                      │ genera               │
-│  ┌──────────────┐                    ▼                      │
-│  │mysql_airflow │     ┌──────────────────────────────────┐ │
-│  │  puerto 3308 │     │         ./models/                │ │
-│  │  airflow_db  │     │  model.pkl, scaler.pkl, etc.     │ │
-│  └──────────────┘     └──────────────┬───────────────────┘ │
-│                                      │ lee                  │
-│                        ┌─────────────▼───────────────────┐ │
-│                        │      FastAPI (puerto 8000)       │ │
-│                        │      POST /predict               │ │
-│                        └─────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
-```
-
 ### Servicios
 
 | Servicio | Imagen | Puerto | Descripción |
@@ -125,23 +98,13 @@ docker-compose ps
 ```
 
 Debes ver todos los contenedores en estado `Up`:
+![alt text](image.png)
 ```
 airflow_scheduler   Up
 airflow_webserver   Up   0.0.0.0:8080->8080/tcp
 mysql_airflow       Up   0.0.0.0:3308->3306/tcp
 mysql_data          Up   0.0.0.0:3307->3306/tcp
 penguins_api        Up   0.0.0.0:8000->8000/tcp
-```
-
-### 5. Verifica que Airflow se inicializó correctamente
-
-```bash
-docker-compose logs airflow-init
-```
-
-Al final debe aparecer:
-```
-Airflow init completado!
 ```
 
 ---
@@ -170,7 +133,7 @@ Haz clic en el nombre del DAG para ver el gráfico de ejecución. Las tareas deb
 ```
 start → clear_database → load_raw_data → preprocess_data → train_model → end
 ```
-
+![alt text](image-1.png)
 ### ¿Qué hace cada tarea?
 
 | Tarea | Descripción |
@@ -250,28 +213,16 @@ Invoke-RestMethod -Method Post -Uri "http://localhost:8000/predict" `
 
 ---
 
-## 🎯 Objetivos y conclusiones
-
-### Objetivos
-
-Este taller tuvo como objetivo implementar un pipeline de MLOps completo que demuestre la integración de las siguientes prácticas:
-
-- **Orquestación de workflows** con Apache Airflow, definiendo un DAG con múltiples tareas encadenadas.
-- **Separación de responsabilidades** entre bases de datos: una exclusiva para datos de negocio y otra para metadatos del orquestador.
-- **Reproducibilidad** del pipeline: cada ejecución del DAG parte desde cero, garantizando resultados consistentes.
-- **Desacoplamiento de servicios** mediante Docker Compose, donde cada componente corre en su propio contenedor.
-- **Exposición del modelo** a través de una API REST lista para consumirse desde cualquier cliente.
-
 ### Conclusiones
 
-- Apache Airflow permite visualizar, monitorear y re-ejecutar cada paso del pipeline de forma independiente, lo que facilita la depuración y el mantenimiento.
+- Apache Airflow permite visualizar, monitorear y re-ejecutar cada paso del pipeline de forma independiente.
+
 - Separar la base de datos de datos de la base de datos de metadatos es una buena práctica que evita conflictos y facilita el escalado independiente de cada componente.
 - Contenerizar todos los servicios en un único `docker-compose.yml` simplifica el despliegue y garantiza que el entorno sea reproducible en cualquier máquina.
-- El uso de volúmenes compartidos entre Airflow y la API es una solución simple y efectiva para pasar artefactos de ML entre servicios sin necesidad de un registry externo como MLflow.
 
 ---
 
-## 🛑 Apagar el stack
+## Apagar el stack
 
 ```bash
 # Detener sin borrar datos
