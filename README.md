@@ -199,6 +199,7 @@ Invoke-RestMethod -Method Post -Uri "http://localhost:8000/predict" `
   "species": "Gentoo"
 }
 ```
+![alt text](image-2.png)
 
 ### Campos del request
 
